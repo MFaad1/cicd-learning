@@ -1,29 +1,55 @@
-name: CI/CD Pipeline
+  name: cicd piplines
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  on: 
+    push:
+      branches:
+        -main
+  jobs:
+    Testing-app:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+      
+        - name: Setup node js
+          uses: actions/setup-node@v3
+        
+        - name: install packages
+          uses: npm install
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+        - name: Run Test Cases
+          uses: npm test
 
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@v3
+        
 
-      - name: Set up Node.js (example for a Node.js project)
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
 
-      - name: Install dependencies
-        run: npm install
 
-      - name: Run tests
-        run: npm test
+# name: CI/CD Pipeline
+
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Check out the repository
+#         uses: actions/checkout@v3
+
+#       - name: Set up Node.js (example for a Node.js project)
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '20'
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run tests
+#         run: npm test
   
