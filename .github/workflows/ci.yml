@@ -15,10 +15,10 @@
           uses: actions/setup-node@v3
         
         - name: install packages
-          uses: npm install
+          run: npm install
 
         - name: Run Test Cases
-          uses: npm test
+          run: npm test
 
         
 
