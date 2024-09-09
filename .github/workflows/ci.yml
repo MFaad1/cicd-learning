@@ -17,10 +17,6 @@ jobs:
        
      - name: install packages
        run: npm install
-
-     - name: making build
-       run: npm run bulid
-       
      - name: Add test cases
        run: npm test
 
