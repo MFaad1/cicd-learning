@@ -1,58 +1,72 @@
-name: test cicd pipelines
+name: CI Pipeline
+
 on:
   push:
     branches:
       - main
- 
+  pull_request:
+    branches:
+      - main
+
 jobs:
-  Testing-app:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-     - name: Check in the repository
-       uses: actions/checkout@v3
+      - name: Check out the repository
+        uses: actions/checkout@v3
 
-     - name: use Node latest versions
-       uses: actions/setup-node@v3
-       
-     - name: install packages
-       run: npm install
-     - name: Add test cases
-       run: npm test
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # You can adjust the version to your needs
 
+      - name: Install dependencies
+        run: npm install
 
+      - name: Build the project
+        run: npm run build # This will run your build script defined in package.json
 
+  test:
+    runs-on: ubuntu-latest
+    needs: build # This ensures that the test job runs only if the build job succeeds
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
 
-        
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
 
+      - name: Install dependencies
+        run: npm install
 
+      - name: Run tests
+        run: npm test
 
-# name: CI/CD Pipeline
+  package:
+    runs-on: ubuntu-latest
+    needs: test # This ensures that the package job runs only if the test job succeeds
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
 
-# on:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
-#     branches:
-#       - main
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
+      - name: Install dependencies
+        run: npm install
 
-#     steps:
-#       - name: Check out the repository
-#         uses: actions/checkout@v3
+      - name: Build the project
+        run: npm run build
 
-#       - name: Set up Node.js (example for a Node.js project)
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: '20'
+      - name: Create a zip package of the build
+        run: zip -r build.zip ./build
 
-#       - name: Install dependencies
-#         run: npm install
-
-#       - name: Run tests
-#         run: npm test
-  
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-build
+          path: build.zip
