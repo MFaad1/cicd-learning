@@ -6,7 +6,7 @@ on:
  
 jobs:
   Testing-app:
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
 
     steps:
      - name: Check in the repository
